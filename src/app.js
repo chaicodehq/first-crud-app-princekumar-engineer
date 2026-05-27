@@ -15,5 +15,24 @@ import { notFound } from "./middlewares/notFound.middleware.js";
  * 7. Return app
  */
 export function createApp() {
-  // Your code here
+  const app = express();
+
+  // Parse JSON body
+  app.use(express.json());
+
+  // Health check
+  app.get("/health", (req, res) => {
+    res.json({ ok: true });
+  });
+
+  // Todo routes
+  app.use("/api/todos", todoRoutes);
+
+  // 404 handler
+  app.use(notFound);
+
+  // Error handler (LAST)
+  app.use(errorHandler);
+
+  return app;
 }
